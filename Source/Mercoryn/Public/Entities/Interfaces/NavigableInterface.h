@@ -22,4 +22,11 @@ class MERCORYN_API INavigableInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+
+	float WalkSpeed;
+
+	float RunSpeed;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Navigable Interface")
+	void MoveToLocation(const FVector TargetLocation, const float Speed);
 };

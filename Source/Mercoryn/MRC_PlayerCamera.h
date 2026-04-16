@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "MRC_PlayerPawn.generated.h"
-
+#include "MRC_PlayerCamera.generated.h"
 
 class USceneComponent;
 class USpringArmComponent;
@@ -16,16 +15,14 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
+
 UCLASS()
-class MERCORYN_API AMRC_PlayerPawn : public APawn
+class MERCORYN_API AMRC_PlayerCamera : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this pawn's properties
-	AMRC_PlayerPawn();
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category = "Components")
 	USceneComponent* SceneRoot;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
@@ -38,7 +35,7 @@ public:
 	UFloatingPawnMovement* FloatingPawnMovement;
 
 	// Movement
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Controller")
+	UPROPERTY(EditAnyWhere,BlueprintReadWrite, Category = "Controller")
 	float MovementSpeed = 1.0f;
 
 	// Camera zoom
@@ -58,7 +55,7 @@ public:
 	// Scroll
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Controller")
 	float EdgeScrollSpeed = 1.5f;
-
+	
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Controller")
 	float EdgeDistanceFrac = 0.1f;
 
@@ -74,11 +71,10 @@ public:
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* RotateHoldAction;
-
+	
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Input")
 	UInputAction* RotateAction;
-
-
+		
 private:
 	float CameraDistanceTarget;
 	float CameraAngle;
@@ -86,6 +82,10 @@ private:
 	float MouseX;
 	float MouseY;
 	FVector2D ViewportSize;
+
+public:
+	// Sets default values for this pawn's properties
+	AMRC_PlayerCamera();
 
 protected:
 	// Called when the game starts or when spawned
@@ -98,15 +98,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-
 private:
 	void Move(const FInputActionValue& Value);
 	void Zoom(const FInputActionValue& Value);
 	void RotateStart();
 	void RotateEnd();
 	void Rotate(const FInputActionValue& Value);
-
+	
 	void CalculateCameraTransform(float DeltaTime);
 	void EdgeScroll();
+
 
 };

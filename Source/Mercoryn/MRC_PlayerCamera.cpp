@@ -1,7 +1,6 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright by David Backes
 
-
-#include "PlayerCamera.h"
+#include "MRC_PlayerCamera.h"
 
 #include "Components/SceneComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -19,7 +18,7 @@
 
 
 // Sets default values
-APlayerCamera::APlayerCamera()
+AMRC_PlayerCamera::AMRC_PlayerCamera()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -45,7 +44,7 @@ APlayerCamera::APlayerCamera()
 }
 
 // Called when the game starts or when spawned
-void APlayerCamera::BeginPlay()
+void AMRC_PlayerCamera::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -57,17 +56,17 @@ void APlayerCamera::BeginPlay()
 }
 
 // Called every frame
-void APlayerCamera::Tick(float DeltaTime)
+void AMRC_PlayerCamera::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	CalculateCameraTransform(DeltaTime);
 
-	EdgeScroll();
+	//EdgeScroll();
 }
 
 // Called to bind functionality to input
-void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AMRC_PlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
@@ -78,16 +77,16 @@ void APlayerCamera::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Subsystem->AddMappingContext(InputMapping, 0);
 
 	UEnhancedInputComponent* Input = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-	Input->BindAction(MovementAction, ETriggerEvent::Triggered, this, &APlayerCamera::Move);
-	Input->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &APlayerCamera::Zoom);
-	Input->BindAction(RotateHoldAction, ETriggerEvent::Triggered, this, &APlayerCamera::RotateStart);
-	Input->BindAction(RotateHoldAction, ETriggerEvent::Completed, this, &APlayerCamera::RotateEnd);
-	Input->BindAction(RotateAction, ETriggerEvent::Triggered, this, &APlayerCamera::Rotate);
+	Input->BindAction(MovementAction, ETriggerEvent::Triggered, this, &AMRC_PlayerCamera::Move);
+	Input->BindAction(ZoomAction, ETriggerEvent::Triggered, this, &AMRC_PlayerCamera::Zoom);
+	Input->BindAction(RotateHoldAction, ETriggerEvent::Triggered, this, &AMRC_PlayerCamera::RotateStart);
+	Input->BindAction(RotateHoldAction, ETriggerEvent::Completed, this, &AMRC_PlayerCamera::RotateEnd);
+	Input->BindAction(RotateAction, ETriggerEvent::Triggered, this, &AMRC_PlayerCamera::Rotate);
 
 
 }
 
-void APlayerCamera::Move(const FInputActionValue& Value)
+void AMRC_PlayerCamera::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementInput = Value.Get<FVector2D>();
 	FVector Movement = GetActorForwardVector() * MovementInput.Y + GetActorRightVector() * MovementInput.X;
@@ -95,12 +94,12 @@ void APlayerCamera::Move(const FInputActionValue& Value)
 	FloatingPawnMovement->AddInputVector(Movement * MovementSpeed, false);
 }
 
-void APlayerCamera::Zoom(const FInputActionValue& Value)
+void AMRC_PlayerCamera::Zoom(const FInputActionValue& Value)
 {
 	CameraDistanceTarget = FMath::Clamp(CameraDistance - (Value.Get<float>() * CameraZoomSensitivity), 500.0f, 5000.0f);
 }
 
-void APlayerCamera::RotateStart()
+void AMRC_PlayerCamera::RotateStart()
 {
 	if (bIsRotating) {
 		return;
@@ -118,7 +117,7 @@ void APlayerCamera::RotateStart()
 
 }
 
-void APlayerCamera::RotateEnd()
+void AMRC_PlayerCamera::RotateEnd()
 {
 	if (!bIsRotating) {
 		return;
@@ -137,7 +136,7 @@ void APlayerCamera::RotateEnd()
 	PlayerController->SetInputMode(InputMode);
 }
 
-void APlayerCamera::Rotate(const FInputActionValue& Value)
+void AMRC_PlayerCamera::Rotate(const FInputActionValue& Value)
 {
 	if (!bIsRotating) {
 		return;
@@ -149,7 +148,7 @@ void APlayerCamera::Rotate(const FInputActionValue& Value)
 	PlayerController->SetMouseLocation((int)MouseX, (int)MouseY);
 }
 
-void APlayerCamera::CalculateCameraTransform(float DeltaTime)
+void AMRC_PlayerCamera::CalculateCameraTransform(float DeltaTime)
 {
 	CameraDistance = FMath::FInterpTo(CameraDistance, CameraDistanceTarget, DeltaTime, CameraZoomSpeed);
 	CameraAngle = FMath::Lerp(15.0f, 45.0f, CameraDistance / 5000.0f);
@@ -160,7 +159,7 @@ void APlayerCamera::CalculateCameraTransform(float DeltaTime)
 	Camera->SetRelativeRotation(FRotator(CameraAngle * -1.0f, 0.0f, 0.0f), false, nullptr, ETeleportType::None);
 }
 
-void APlayerCamera::EdgeScroll()
+void AMRC_PlayerCamera::EdgeScroll()
 {
 	ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
