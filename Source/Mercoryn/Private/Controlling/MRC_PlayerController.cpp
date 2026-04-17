@@ -190,7 +190,7 @@ void AMRC_PlayerController::NavigateToTarget(const float MovementSpeed)
 			}
 		}
 	}
-	else
+	else if(SelectedActor)
 	{
 		if (SelectedActor->GetClass()->ImplementsInterface(UNavigableInterface::StaticClass()))
 		{

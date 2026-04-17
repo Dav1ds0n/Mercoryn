@@ -1,17 +1,11 @@
 // Copyright by David Backes
 
-#pragma once
-
-#include "CoreMinimal.h"
-#include "UObject/Class.h"
-#include "MRC_ResourceTypes.generated.h"
-
-/**
- * 
- */
-UCLASS()
-class MERCORYN_API UMRC_ResourceTypes : public UEnum
-{
-	GENERATED_BODY()
-	
-};
+//UENUM(BlueprintType)
+//enum class EMRC_ResourceTypes : uint8
+//{
+//	Wood UMETA(DisplayName = "Wood"),
+//	Straw UMETA(DisplayName = "Straw"),
+//	Stone UMETA(DisplayName = "Stone"),
+//	Meat UMETA(DisplayName = "Meat"),
+//	Gold UMETA(DisplayName = "Gold")
+//};
