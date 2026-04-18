@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 
-/**
- * 
- */
-class MERCORYN_API MRC_PawnType
+UENUM(BlueprintType)
+enum class EMRC_PawnType : uint8
 {
-public:
-	MRC_PawnType();
-	~MRC_PawnType();
+	Villager UMETA(DisplayName = "Villager"),
+	Swordman UMETA(DisplayName = "Swordman"),
+	Knight UMETA(DisplayName = "Knight"),
+	Archer UMETA(DisplayName = "Archer")
+
 };

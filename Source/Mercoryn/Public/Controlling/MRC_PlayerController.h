@@ -15,6 +15,8 @@ struct FInputActionValue;
 
 class AMRC_TopDown_HUD;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorsSelectedDelegate, const TArray<AActor*>&, SelectedActors);
+
 /**
  *
  */
@@ -36,6 +38,9 @@ private:
 	UPROPERTY(EditAnyWhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> SelectAction;
 
+	UPROPERTY(BlueprintAssignable,Category = "Delegates")
+	FOnActorsSelectedDelegate OnActorsSelected;		
+
 	UPROPERTY()
 	TObjectPtr<AActor> SelectedActor;
 
@@ -45,7 +50,6 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<AMRC_TopDown_HUD> TopDownHUD;
-
 
 
 	// Command action

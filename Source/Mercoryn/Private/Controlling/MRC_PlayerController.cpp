@@ -153,6 +153,9 @@ void AMRC_PlayerController::SelectMultipleActors()
 				SelectedActors.AddUnique(SomeActor);
 			}
 		}
+
+		OnActorsSelected.Broadcast(SelectedActors);
+
 	}
 }
 

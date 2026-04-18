@@ -110,3 +110,8 @@ void AMRC_BasePawn::MoveToLocation_Implementation(const FVector TargetLocation, 
 
 }
 
+EMRC_PawnType AMRC_BasePawn::GetPawnType_Implementation()
+{
+	return PawnType;
+}
+
