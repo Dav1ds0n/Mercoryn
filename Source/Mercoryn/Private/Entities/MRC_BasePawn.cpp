@@ -115,3 +115,13 @@ EMRC_PawnType AMRC_BasePawn::GetPawnType_Implementation()
 	return PawnType;
 }
 
+void AMRC_BasePawn::SetFaction_Implementation(const int32 NewFaction)
+{
+	FactionID = NewFaction;
+}
+
+int32 AMRC_BasePawn::GetFaction_Implementation()
+{
+	return FactionID;
+}
+

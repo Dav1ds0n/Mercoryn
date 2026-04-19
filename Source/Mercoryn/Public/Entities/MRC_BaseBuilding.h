@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Interfaces/SelectableInterface.h"
+#include "Common/Interfaces/MRC_FactionInterface.h"
 
 #include "MRC_BaseBuilding.generated.h"
 
@@ -15,7 +16,7 @@ class UStaticMeshComponent;
 class UCapsuleComponent;
 
 UCLASS()
-class MERCORYN_API AMRC_BaseBuilding : public AActor, public ISelectableInterface
+class MERCORYN_API AMRC_BaseBuilding : public AActor, public ISelectableInterface, public IMRC_FactionInterface
 {
 	GENERATED_BODY()
 	
@@ -32,6 +33,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Static Mesh", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> SelectedIndicator;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
+	int32 FactionID = 0;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -43,5 +48,10 @@ public:
 
 	// Selectable Interface
 	void SelectActor_Implementation(const bool Selected) override;
+
+
+	void SetFaction_Implementation(const int32 NewFaction) override;
+
+	int32 GetFaction_Implementation() override;
 
 };

@@ -10,6 +10,7 @@
 #include "Interfaces/SelectableInterface.h"
 #include "Interfaces/NavigableInterface.h"
 #include "Interfaces/MRC_BasePawnInterface.h"
+#include "Common/Interfaces/MRC_FactionInterface.h"
 
 #include "Enums/MRC_PawnType.h"
 
@@ -21,7 +22,7 @@ class UFloatingPawnMovement;
 class UStaticMeshComponent;
 
 UCLASS()
-class MERCORYN_API AMRC_BasePawn : public APawn, public ISelectableInterface, public INavigableInterface, public IMRC_BasePawnInterface
+class MERCORYN_API AMRC_BasePawn : public APawn, public ISelectableInterface, public INavigableInterface, public IMRC_BasePawnInterface, public IMRC_FactionInterface
 {
 	GENERATED_BODY()
 
@@ -45,6 +46,10 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = "true"))
 	EMRC_PawnType PawnType = EMRC_PawnType::Villager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
+	int32 FactionID = 0;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -88,4 +93,9 @@ public:
 	void MoveToLocation_Implementation(const FVector TargetLocation, const float MoveSpeed) override;
 
 	EMRC_PawnType GetPawnType_Implementation() override;
+
+	void SetFaction_Implementation(const int32 NewFaction) override;
+
+	int32 GetFaction_Implementation() override;
+
 };

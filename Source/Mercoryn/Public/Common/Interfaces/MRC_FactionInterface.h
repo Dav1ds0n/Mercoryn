@@ -14,7 +14,7 @@ class UMRC_FactionInterface : public UInterface
 };
 
 /**
- * 
+ *
  */
 class MERCORYN_API IMRC_FactionInterface
 {
@@ -22,4 +22,10 @@ class MERCORYN_API IMRC_FactionInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Faction")
+	int32 GetFaction();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Faction")
+	void SetFaction(int32 NewFaction);
+
 };

@@ -4,12 +4,33 @@
 
 #include "CoreMinimal.h"
 
+#include "MRC_FactionData.generated.h"
+
 /**
- * 
+ *
  */
-class MERCORYN_API MRC_FactionData
+USTRUCT(BlueprintType)
+struct FMRC_FactionData : public FTableRowBase
 {
-public:
-	MRC_FactionData();
-	~MRC_FactionData();
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Faction")
+	FString Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Faction")
+	FLinearColor Color;
+
+	FMRC_FactionData() :
+		Name(TEXT("")),
+		Color(FLinearColor::Red) {
+	}
+
+	FMRC_FactionData(
+		FString Name,
+		FLinearColor Color)
+		:
+		Name(Name),
+		Color(Color) {
+	}
+
 };

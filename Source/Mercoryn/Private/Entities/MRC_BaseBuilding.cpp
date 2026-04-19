@@ -50,3 +50,15 @@ void AMRC_BaseBuilding::SelectActor_Implementation(const bool Selected)
 		SelectedIndicator->SetHiddenInGame(!Selected);
 	}
 }
+
+
+void AMRC_BaseBuilding::SetFaction_Implementation(const int32 NewFaction)
+{
+	FactionID = NewFaction;
+}
+
+int32 AMRC_BaseBuilding::GetFaction_Implementation()
+{
+	return FactionID;
+}
+
