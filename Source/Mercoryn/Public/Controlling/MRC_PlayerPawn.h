@@ -1,5 +1,9 @@
 // Copyright by David Backes
 
+/*
+	Camera and Movement Controlling
+*/
+
 #pragma once
 
 #include "CoreMinimal.h"

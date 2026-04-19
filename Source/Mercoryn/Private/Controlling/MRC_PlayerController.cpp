@@ -73,6 +73,14 @@ void AMRC_PlayerController::Select(const FInputActionValue& Value)
 	// Unselect previously selected Actor
 	if (SelectedActor)
 	{
+		if (SelectedActor->GetClass()->ImplementsInterface(UMRC_FactionInterface::StaticClass()))
+		{
+			int32 ActorFaction = IMRC_FactionInterface::Execute_GetFaction(SelectedActor);
+			if (FactionID != ActorFaction) {
+				return;
+			}
+		}
+
 		if (SelectedActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
 		{
 			ISelectableInterface::Execute_SelectActor(SelectedActor, false);
@@ -87,6 +95,14 @@ void AMRC_PlayerController::Select(const FInputActionValue& Value)
 
 	if (SelectedActor)
 	{
+		if (SelectedActor->GetClass()->ImplementsInterface(UMRC_FactionInterface::StaticClass()))
+		{
+			int32 ActorFaction = IMRC_FactionInterface::Execute_GetFaction(SelectedActor);
+			if (FactionID != ActorFaction) {
+				return;
+			}
+		}
+
 		// Select BasePawn		
 		if (SelectedActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
 		{
@@ -135,9 +151,20 @@ void AMRC_PlayerController::SelectMultipleActors()
 		// Unselect previous selection
 		for (AActor* SomeActor : SelectedActors)
 		{
-			if (SomeActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+			if (SomeActor) 
 			{
-				ISelectableInterface::Execute_SelectActor(SomeActor, false);
+				if(SomeActor->GetClass()->ImplementsInterface(UMRC_FactionInterface::StaticClass()))
+				{
+					int32 ActorFaction = IMRC_FactionInterface::Execute_GetFaction(SomeActor);
+					if (FactionID != ActorFaction) {
+						continue;
+					}
+				}
+
+				if (SomeActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+				{
+					ISelectableInterface::Execute_SelectActor(SomeActor, false);
+				}
 			}
 		}
 
@@ -147,10 +174,21 @@ void AMRC_PlayerController::SelectMultipleActors()
 		TArray<AActor*> AllSelectedActors = TopDownHUD->GetSelectedActors();
 		for (AActor* SomeActor : AllSelectedActors)
 		{
-			if (SomeActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+			if (SomeActor)
 			{
-				ISelectableInterface::Execute_SelectActor(SomeActor, true);
-				SelectedActors.AddUnique(SomeActor);
+				if (SomeActor->GetClass()->ImplementsInterface(UMRC_FactionInterface::StaticClass()))
+				{
+					int32 ActorFaction = IMRC_FactionInterface::Execute_GetFaction(SomeActor);
+					if (FactionID != ActorFaction) {
+						continue;
+					}
+				}
+
+				if (SomeActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+				{
+					ISelectableInterface::Execute_SelectActor(SomeActor, true);
+					SelectedActors.AddUnique(SomeActor);
+				}
 			}
 		}
 
@@ -159,18 +197,16 @@ void AMRC_PlayerController::SelectMultipleActors()
 	}
 }
 
-
+// Commanding Actors
 void AMRC_PlayerController::CommandSelectedActors(const FInputActionValue& Value)
 {
 	NavigateToTarget(400.f);
 }
 
-
 void AMRC_PlayerController::CommandQuickSelectedActor(const FInputActionValue& Value)
 {
 	NavigateToTarget(600.f);
 }
-
 
 void AMRC_PlayerController::NavigateToTarget(const float MovementSpeed)
 {
@@ -201,3 +237,15 @@ void AMRC_PlayerController::NavigateToTarget(const float MovementSpeed)
 		}
 	}
 }
+
+// Faction
+void AMRC_PlayerController::SetFaction_Implementation(const int32 NewFaction)
+{
+	FactionID = NewFaction;
+}
+
+int32 AMRC_PlayerController::GetFaction_Implementation()
+{
+	return FactionID;
+}
+

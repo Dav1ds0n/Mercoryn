@@ -7,6 +7,8 @@
 
 #include "Widgets/MRC_TopDown_HUD.h"
 
+#include "Common/Interfaces/MRC_FactionInterface.h"
+
 #include "MRC_PlayerController.generated.h"
 
 class UInputMappingContext;
@@ -21,7 +23,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActorsSelectedDelegate, const TAr
  *
  */
 UCLASS()
-class MERCORYN_API AMRC_PlayerController : public APlayerController
+class MERCORYN_API AMRC_PlayerController : public APlayerController, public IMRC_FactionInterface
 {
 	GENERATED_BODY()
 
@@ -50,6 +52,10 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<AMRC_TopDown_HUD> TopDownHUD;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
+	int32 FactionID = 0;
 
 
 	// Command action
@@ -81,4 +87,8 @@ private:
 	void CommandSelectedActors(const FInputActionValue& Value);
 
 	void CommandQuickSelectedActor(const FInputActionValue& Value);
+
+	void SetFaction_Implementation(const int32 NewFaction) override;
+
+	int32 GetFaction_Implementation() override;
 };
