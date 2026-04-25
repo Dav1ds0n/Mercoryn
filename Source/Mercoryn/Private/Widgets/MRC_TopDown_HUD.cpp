@@ -1,6 +1,8 @@
 // Copyright by David Backes
 
 
+#include "Entities/MRC_BasePawn.h"
+
 #include "Widgets/MRC_TopDown_HUD.h"
 
 void AMRC_TopDown_HUD::DrawHUD()
@@ -35,11 +37,11 @@ void AMRC_TopDown_HUD::SelectActorsInRect()
 	SelectedActors.Empty();
 	FVector2D FirstPoint = SelectionRectStart;
 	FVector2D SecondPoint = SelectionRectStart + SelectionRectSize;
-	GetActorsInSelectionRectangle<AActor>(FirstPoint, SecondPoint, SelectedActors, false);
+	GetActorsInSelectionRectangle<AMRC_BasePawn>(FirstPoint, SecondPoint, SelectedActors, false);
 	bSelectActors = false;
 }
 
-TArray<AActor*> AMRC_TopDown_HUD::GetSelectedActors()
+TArray<AMRC_BasePawn*> AMRC_TopDown_HUD::GetSelectedActors()
 {
 	return SelectedActors;
 }

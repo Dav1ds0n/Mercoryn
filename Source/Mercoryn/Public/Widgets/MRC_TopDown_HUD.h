@@ -4,7 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+
 #include "MRC_TopDown_HUD.generated.h"
+
+
+class AMRC_BasePawn;
 
 /**
  *
@@ -24,7 +28,7 @@ private:
 	FVector2D SelectionRectStart;
 	FVector2D SelectionRectSize;
 
-	TArray<AActor*> SelectedActors;
+	TArray<AMRC_BasePawn*> SelectedActors;
 
 	void SelectActorsInRect();
 	
@@ -38,6 +42,6 @@ public:
 
 	void HideSelectionRect();
 
-	TArray<AActor*> GetSelectedActors();
+	TArray<AMRC_BasePawn*> GetSelectedActors();
 
 };

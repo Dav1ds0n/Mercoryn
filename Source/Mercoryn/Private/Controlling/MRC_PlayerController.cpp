@@ -12,6 +12,8 @@
 
 #include "Widgets/MRC_TopDown_HUD.h"
 
+#include "Entities/MRC_BasePawn.h"
+
 // Interfaces
 #include "Entities/Interfaces/SelectableInterface.h"
 #include "Entities/Interfaces/NavigableInterface.h"
@@ -85,9 +87,6 @@ void AMRC_PlayerController::Select(const FInputActionValue& Value)
 		{
 			ISelectableInterface::Execute_SelectActor(SelectedActor, false);
 		}
-		else {
-			//UE_LOG(LogTemp, Display, TEXT("No Selectable Interface %s"), *SelectedActor->GetClass()->GetName())
-		}
 
 	}
 
@@ -107,9 +106,6 @@ void AMRC_PlayerController::Select(const FInputActionValue& Value)
 		if (SelectedActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
 		{
 			ISelectableInterface::Execute_SelectActor(SelectedActor, true);
-		}
-		else {
-			//UE_LOG(LogTemp, Display,TEXT("No Selectable Interface %s"),*SelectedActor->GetClass()->GetName())
 		}
 	}
 }
@@ -171,7 +167,7 @@ void AMRC_PlayerController::SelectMultipleActors()
 		SelectedActors.Empty();
 
 		// Select new actors
-		TArray<AActor*> AllSelectedActors = TopDownHUD->GetSelectedActors();
+		TArray<AMRC_BasePawn*> AllSelectedActors = TopDownHUD->GetSelectedActors();
 		for (AActor* SomeActor : AllSelectedActors)
 		{
 			if (SomeActor)
@@ -220,7 +216,7 @@ void AMRC_PlayerController::NavigateToTarget(const float MovementSpeed)
 
 	if (SelectedActors.Num() > 0)
 	{
-		int i = SelectedActors.Num();
+		int i = SelectedActors.Num() / -2;
 		for (AActor* SomeActor : SelectedActors)
 		{
 			if (SomeActor->GetClass()->ImplementsInterface(UNavigableInterface::StaticClass()))
@@ -231,6 +227,16 @@ void AMRC_PlayerController::NavigateToTarget(const float MovementSpeed)
 	}
 	else if(SelectedActor)
 	{
+		// Check Faction 
+		if (SelectedActor->GetClass()->ImplementsInterface(UMRC_FactionInterface::StaticClass()))
+		{
+			int32 ActorFaction = IMRC_FactionInterface::Execute_GetFaction(SelectedActor);
+			if (ActorFaction != FactionID) {
+				return;
+			}
+		}
+
+		// Check Navigable
 		if (SelectedActor->GetClass()->ImplementsInterface(UNavigableInterface::StaticClass()))
 		{
 			INavigableInterface::Execute_MoveToLocation(SelectedActor, HitResult.Location, MovementSpeed);

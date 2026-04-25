@@ -55,7 +55,7 @@ private:
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
-	int32 FactionID = 0;
+	int32 FactionID = 1;
 
 
 	// Command action
