@@ -43,11 +43,10 @@ private:
 	UPROPERTY(BlueprintAssignable,Category = "Delegates")
 	FOnActorsSelectedDelegate OnActorsSelected;		
 
-	UPROPERTY()
-	TObjectPtr<AActor> SelectedActor;
-
+	
 	FVector2D SelectionStartPosition;
 	FVector2D SelectionSize;
+	UPROPERTY()
 	TArray<AActor*> SelectedActors;
 
 	UPROPERTY()

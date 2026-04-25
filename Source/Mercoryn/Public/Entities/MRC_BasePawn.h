@@ -50,6 +50,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
 	int32 FactionID = 0;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Building", meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<AMRC_BaseBuilding>> BuildOptions;
 
 protected:
 	// Called when the game starts or when spawned
@@ -92,7 +94,10 @@ public:
 	// Navigable Interface
 	void MoveToLocation_Implementation(const FVector TargetLocation, const float MoveSpeed) override;
 
+	// Base pawn Interface	
 	EMRC_PawnType GetPawnType_Implementation() override;
+
+	TArray<TSubclassOf<AMRC_BaseBuilding>> GetBuildOptions_Implementation() override;
 
 	void SetFaction_Implementation(const int32 NewFaction) override;
 

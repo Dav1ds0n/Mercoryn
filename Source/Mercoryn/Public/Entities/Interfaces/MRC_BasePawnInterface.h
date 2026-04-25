@@ -9,6 +9,8 @@
 
 #include "MRC_BasePawnInterface.generated.h"
 
+class AMRC_BaseBuilding;
+
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
 class UMRC_BasePawnInterface : public UInterface
@@ -29,5 +31,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Base Pawn Interface")
 	EMRC_PawnType GetPawnType();
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Base Pawn Interface")
+	TArray<TSubclassOf<AMRC_BaseBuilding>> GetBuildOptions();
 
 };

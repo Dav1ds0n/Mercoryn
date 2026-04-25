@@ -14,6 +14,9 @@
 class UBoxComponent;
 class UStaticMeshComponent;
 class UCapsuleComponent;
+class UInputAction;
+
+struct FInputActionValue;
 
 UCLASS()
 class MERCORYN_API AMRC_BaseBuilding : public AActor, public ISelectableInterface, public IMRC_FactionInterface
@@ -36,6 +39,23 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
 	int32 FactionID = 0;
 
+	// Buidling Placement
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> PlaceAction;
+
+	UPROPERTY()
+	FTimerHandle PlacementValidationTimerHandle;
+	
+	UPROPERTY()
+	FName RequiredTag = "CanPlaceBuildings"; // Need in Landscape for creating
+
+
+	UPROPERTY()
+	bool bCanPlaceBuilding = false;
+
+	// Building Size
+	UPROPERTY()
+	FVector BuildingExtents = FVector(500.0f, 500.0f, .0f); 
 
 protected:
 	// Called when the game starts or when spawned
@@ -49,9 +69,27 @@ public:
 	// Selectable Interface
 	void SelectActor_Implementation(const bool Selected) override;
 
-
 	void SetFaction_Implementation(const int32 NewFaction) override;
 
+	// Faction Interface
 	int32 GetFaction_Implementation() override;
+
+
+	// Place Building mode
+	UFUNCTION(BlueprintCallable, Category = "Building")
+	void EnablePlacingMode();
+
+	// Check location for placement
+	void ValidatePlacementLocation();
+
+	// Place the building
+	void PlaceBuilding(const FInputActionValue& Value);
+
+	// Cancel Placement Building
+	void CancelBuildingPlacement();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Building")
+	void ToggleBuildingValidity(bool bValid);
+
 
 };
