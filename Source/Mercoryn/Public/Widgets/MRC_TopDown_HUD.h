@@ -8,8 +8,6 @@
 #include "MRC_TopDown_HUD.generated.h"
 
 
-class AMRC_BasePawn;
-
 /**
  *
  */
@@ -28,7 +26,7 @@ private:
 	FVector2D SelectionRectStart;
 	FVector2D SelectionRectSize;
 
-	TArray<AMRC_BasePawn*> SelectedActors;
+	TArray<AActor*> SelectedActors;
 
 	void SelectActorsInRect();
 	
@@ -42,6 +40,6 @@ public:
 
 	void HideSelectionRect();
 
-	TArray<AMRC_BasePawn*> GetSelectedActors();
+	TArray<AActor*> GetSelectedActors();
 
 };

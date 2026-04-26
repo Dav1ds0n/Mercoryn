@@ -9,10 +9,10 @@
 // Interfaces
 #include "Interfaces/SelectableInterface.h"
 #include "Interfaces/NavigableInterface.h"
-#include "Interfaces/MRC_BasePawnInterface.h"
+#include "Interfaces/MRC_BaseActorInterface.h"
 #include "Common/Interfaces/MRC_FactionInterface.h"
 
-#include "Enums/MRC_PawnType.h"
+#include "Enums/MRC_ActorType.h"
 
 #include "MRC_BasePawn.generated.h"
 
@@ -22,7 +22,7 @@ class UFloatingPawnMovement;
 class UStaticMeshComponent;
 
 UCLASS()
-class MERCORYN_API AMRC_BasePawn : public APawn, public ISelectableInterface, public INavigableInterface, public IMRC_BasePawnInterface, public IMRC_FactionInterface
+class MERCORYN_API AMRC_BasePawn : public APawn, public ISelectableInterface, public INavigableInterface, public IMRC_BaseActorInterface, public IMRC_FactionInterface
 {
 	GENERATED_BODY()
 
@@ -45,7 +45,7 @@ private:
 	TObjectPtr<UStaticMeshComponent> SelectedIndicator;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pawn", meta = (AllowPrivateAccess = "true"))
-	EMRC_PawnType PawnType = EMRC_PawnType::Villager;
+	EMRC_ActorType ActorType = EMRC_ActorType::Villager;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
 	int32 FactionID = 0;
@@ -94,11 +94,12 @@ public:
 	// Navigable Interface
 	void MoveToLocation_Implementation(const FVector TargetLocation, const float MoveSpeed) override;
 
-	// Base pawn Interface	
-	EMRC_PawnType GetPawnType_Implementation() override;
+	// Base Actor Interface	
+	EMRC_ActorType GetActorType_Implementation() override;
 
 	TArray<TSubclassOf<AMRC_BaseBuilding>> GetBuildOptions_Implementation() override;
-
+	
+	// Faction Interface
 	void SetFaction_Implementation(const int32 NewFaction) override;
 
 	int32 GetFaction_Implementation() override;

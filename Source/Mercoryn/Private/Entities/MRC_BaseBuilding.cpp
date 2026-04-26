@@ -57,16 +57,31 @@ void AMRC_BaseBuilding::SelectActor_Implementation(const bool Selected)
 	}
 }
 
-
 void AMRC_BaseBuilding::SetFaction_Implementation(const int32 NewFaction)
 {
 	FactionID = NewFaction;
 }
 
+// Faction Interface
 int32 AMRC_BaseBuilding::GetFaction_Implementation()
 {
 	return FactionID;
 }
+
+// Base Actor Interface
+
+EMRC_ActorType AMRC_BaseBuilding::GetActorType_Implementation()
+{
+	return ActorType;
+}
+
+TArray<TSubclassOf<AMRC_BaseBuilding>> AMRC_BaseBuilding::GetBuildOptions_Implementation()
+{
+	return BuildOptions;
+}
+
+
+// Building 
 
 void AMRC_BaseBuilding::EnablePlacingMode()
 {

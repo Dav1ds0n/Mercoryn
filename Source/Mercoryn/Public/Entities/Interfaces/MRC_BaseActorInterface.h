@@ -5,15 +5,15 @@
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
 
-#include "Enums/MRC_PawnType.h"
+#include "Enums/MRC_ActorType.h"
 
-#include "MRC_BasePawnInterface.generated.h"
+#include "MRC_BaseActorInterface.generated.h"
 
 class AMRC_BaseBuilding;
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UMRC_BasePawnInterface : public UInterface
+class UMRC_BaseActorInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -21,7 +21,7 @@ class UMRC_BasePawnInterface : public UInterface
 /**
  * 
  */
-class MERCORYN_API IMRC_BasePawnInterface
+class MERCORYN_API IMRC_BaseActorInterface
 {
 	GENERATED_BODY()
 
@@ -29,7 +29,7 @@ class MERCORYN_API IMRC_BasePawnInterface
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Base Pawn Interface")
-	EMRC_PawnType GetPawnType();
+	EMRC_ActorType GetActorType();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Base Pawn Interface")
 	TArray<TSubclassOf<AMRC_BaseBuilding>> GetBuildOptions();

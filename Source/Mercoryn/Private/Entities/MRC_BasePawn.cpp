@@ -110,9 +110,9 @@ void AMRC_BasePawn::MoveToLocation_Implementation(const FVector TargetLocation, 
 
 }
 
-EMRC_PawnType AMRC_BasePawn::GetPawnType_Implementation()
+EMRC_ActorType AMRC_BasePawn::GetActorType_Implementation()
 {
-	return PawnType;
+	return ActorType;
 }
 
 TArray<TSubclassOf<AMRC_BaseBuilding>> AMRC_BasePawn::GetBuildOptions_Implementation()

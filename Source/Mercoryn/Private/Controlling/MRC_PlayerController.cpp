@@ -68,35 +68,39 @@ void AMRC_PlayerController::SetupInputComponent()
 
 // Single Select
 void AMRC_PlayerController::Select(const FInputActionValue& Value)
-{	
-	FHitResult HitResult;
-	GetHitResultUnderCursor(ECollisionChannel::ECC_Camera, false, HitResult);
-
-	// Unselect previously selected Actor
-	if (SelectedActors.Num() > 0)
+{
+	if (TopDownHUD)
 	{
-		for (AActor* SomeActor : SelectedActors)
+		FHitResult HitResult;
+		GetHitResultUnderCursor(ECollisionChannel::ECC_Camera, false, HitResult);
+
+		// Unselect previously selected Actor
+		if (SelectedActors.Num() > 0)
 		{
-			if (SomeActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+			for (AActor* SomeActor : SelectedActors)
 			{
-				ISelectableInterface::Execute_SelectActor(SomeActor, false);
+				if (SomeActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+				{
+					ISelectableInterface::Execute_SelectActor(SomeActor, false);
+				}
 			}
 		}
-	}
 
-	SelectedActors.Empty();
+		SelectedActors.Empty();
 
-	AActor* SelectedActor = HitResult.GetActor();
+		AActor* SelectedActor = HitResult.GetActor();
 
-	if (SelectedActor)
-	{		
-
-		// Select BasePawn		
-		if (SelectedActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+		if (SelectedActor)
 		{
-			ISelectableInterface::Execute_SelectActor(SelectedActor, true);
-			SelectedActors.AddUnique(SelectedActor);
+
+			// Select BasePawn		
+			if (SelectedActor->GetClass()->ImplementsInterface(USelectableInterface::StaticClass()))
+			{
+				ISelectableInterface::Execute_SelectActor(SelectedActor, true);
+				SelectedActors.AddUnique(SelectedActor);
+			}
 		}
+		OnActorsSelected.Broadcast(SelectedActors);
 	}
 }
 
@@ -149,7 +153,7 @@ void AMRC_PlayerController::SelectMultipleActors()
 		SelectedActors.Empty();
 
 		// Select new actors
-		TArray<AMRC_BasePawn*> AllSelectedActors = TopDownHUD->GetSelectedActors();
+		TArray<AActor*> AllSelectedActors = TopDownHUD->GetSelectedActors();
 
 		if (AllSelectedActors.Num() == 1)
 		{

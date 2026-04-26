@@ -7,7 +7,10 @@
 #include "Components/CapsuleComponent.h"
 
 #include "Interfaces/SelectableInterface.h"
+#include "Interfaces/MRC_BaseActorInterface.h"
 #include "Common/Interfaces/MRC_FactionInterface.h"
+
+#include "Enums/MRC_ActorType.h"
 
 #include "MRC_BaseBuilding.generated.h"
 
@@ -19,7 +22,7 @@ class UInputAction;
 struct FInputActionValue;
 
 UCLASS()
-class MERCORYN_API AMRC_BaseBuilding : public AActor, public ISelectableInterface, public IMRC_FactionInterface
+class MERCORYN_API AMRC_BaseBuilding : public AActor, public ISelectableInterface, public IMRC_FactionInterface, public IMRC_BaseActorInterface
 {
 	GENERATED_BODY()
 	
@@ -39,7 +42,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Faction", meta = (AllowPrivateAccess = "true"))
 	int32 FactionID = 0;
 
-	// Buidling Placement
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Building", meta = (AllowPrivateAccess = "true"))
+	EMRC_ActorType ActorType = EMRC_ActorType::House;
+
+
+	// Building Placement
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> PlaceAction;
 
@@ -49,9 +56,12 @@ private:
 	UPROPERTY()
 	FName RequiredTag = "CanPlaceBuildings"; // Need in Landscape for creating
 
-
 	UPROPERTY()
 	bool bCanPlaceBuilding = false;
+
+	// Building Options
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Building", meta = (AllowPrivateAccess = "true"))
+	TArray<TSubclassOf<AMRC_BaseBuilding>> BuildOptions;
 
 	// Building Size
 	UPROPERTY()
@@ -74,6 +84,10 @@ public:
 	// Faction Interface
 	int32 GetFaction_Implementation() override;
 
+	// Base Actor Interface	
+	EMRC_ActorType GetActorType_Implementation() override;
+
+	TArray<TSubclassOf<AMRC_BaseBuilding>> GetBuildOptions_Implementation() override;
 
 	// Place Building mode
 	UFUNCTION(BlueprintCallable, Category = "Building")
