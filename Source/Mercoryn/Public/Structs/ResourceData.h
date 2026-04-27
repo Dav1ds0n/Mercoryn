@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Enums/ResourceType.h"
+#include "Enums/MRC_ActorType.h"
+
+#include "AttributeSet.h"
 
 #include "ResourceData.generated.h"
 
@@ -45,8 +48,29 @@ struct FResourceData : public FTableRowBase
 		Texture(Tex), 
 		DefaultValue(Default) {
 	}
+};
+
+USTRUCT(BlueprintType)
+struct FMRC_ActorBuildCost : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
+	EMRC_ActorType ActorType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
+	TMap<FGameplayAttribute, int32> BuildCost;
+
+};
 
 
+USTRUCT(BlueprintType)
+struct FResourceMessage 
+{
+	GENERATED_USTRUCT_BODY()
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Resource")
+	TArray<FGameplayAttribute> ResourceAttributes;
 
 };

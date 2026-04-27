@@ -5,6 +5,9 @@
 
 #include "Controlling/MRC_PlayerController.h"
 
+#include "Structs/ResourceData.h"
+#include "PlayerStates/MRC_PlayerState.h"
+
 #include "Components/BoxComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "EnhancedInputComponent.h"
@@ -155,10 +158,25 @@ void AMRC_BaseBuilding::ValidatePlacementLocation()
 	bCanPlaceBuilding = true;
 }
 
+void AMRC_BaseBuilding::RevertBuildingPlacementCost()
+{
+	FString sActorType = UEnum::GetValueAsString(ActorType);
+	FString CleanName;
+	sActorType.Split("::", nullptr, &CleanName);
+	FMRC_ActorBuildCost* BuildCost = DTBuildCosts->FindRow<FMRC_ActorBuildCost>(FName(CleanName), TEXT(""));
+
+	if (BuildCost)
+	{
+		AMRC_PlayerState* PlayerState = Cast<AMRC_PlayerState>(GetWorld()->GetFirstPlayerController()->PlayerState);
+		PlayerState->RevertBuildCost(BuildCost->BuildCost);
+	}
+}
+
 void AMRC_BaseBuilding::PlaceBuilding(const FInputActionValue& Value)
 {
 	if (!bCanPlaceBuilding)
 	{
+		RevertBuildingPlacementCost();
 		SetLifeSpan(0.1f);
 		return;
 	}

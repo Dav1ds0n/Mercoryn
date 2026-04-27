@@ -67,6 +67,11 @@ private:
 	UPROPERTY()
 	FVector BuildingExtents = FVector(500.0f, 500.0f, .0f); 
 
+	// Building Costs
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Building", meta = (AllowPrivateAccess = "true"))
+	UDataTable* DTBuildCosts;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -95,6 +100,9 @@ public:
 
 	// Check location for placement
 	void ValidatePlacementLocation();
+
+	// Revert costs for building
+	void RevertBuildingPlacementCost();
 
 	// Place the building
 	void PlaceBuilding(const FInputActionValue& Value);
