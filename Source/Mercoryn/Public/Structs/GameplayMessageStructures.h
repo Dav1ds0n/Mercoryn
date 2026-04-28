@@ -3,13 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayMessageStructures.generated.h"
 
-/**
- * 
- */
-class MERCORYN_API GameplayMessageStructures
+
+
+USTRUCT(BlueprintType)
+struct FMRC_CommonGameplayMessage
 {
-public:
-	GameplayMessageStructures();
-	~GameplayMessageStructures();
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Common Gameplay Message")
+	FString MessageText;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Common Gameplay Message")
+	AActor* Sender;
+
 };

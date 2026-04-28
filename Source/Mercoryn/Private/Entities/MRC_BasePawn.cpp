@@ -4,11 +4,14 @@
 #include "Entities/MRC_BasePawn.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "GameFramework/FloatingPawnMovement.h"
 
 #include "AIController.h"
-
 #include "Kismet/KismetMathLibrary.h"
+
+#include "GameFramework/FloatingPawnMovement.h"
+#include "GameFramework/GameplayMessageSubsystem.h"
+
+#include "Structs/GameplayMessageStructures.h"
 
 
 // Sets default values
@@ -39,42 +42,9 @@ AMRC_BasePawn::AMRC_BasePawn()
 // Called when the game starts or when spawned
 void AMRC_BasePawn::BeginPlay()
 {
-	Super::BeginPlay();
-	
-}
-
-void AMRC_BasePawn::OrientPawnToMovementOrientation()
-{		
-	if(!bIsMoving)
-	{
-		return;
-	}
-
-	FVector MoveDirection = (MoveTargetLocation - GetActorLocation());
-	
-	if (MoveDirection.Length() < TargetPrecisionRadius)
-	{
-		bIsMoving = false;
-		CurrentSpeed = 0.f;
-		return;
-	}
-
-	// Set speed
-	FloatingPawnMovement->MaxSpeed = CurrentSpeed;
-
-	// Set direction
-	MoveDirection.Normalize(1);
-	//AddMovementInput(MoveDirection, 1.f);
-
-
-
-	FRotator DesiredRotation = UKismetMathLibrary::MakeRotFromX(MoveDirection);
-	DesiredRotation.Pitch = 0; 
-	DesiredRotation.Roll = 0;
-
-	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), DesiredRotation, GetWorld()->GetDeltaSeconds(), CharacterTurnSpeed);	
-	SetActorRotation(DesiredRotation);
-
+	Super::BeginPlay();	
+	CapsuleComponent->OnBeginCursorOver.AddDynamic(this, &AMRC_BasePawn::OnCapsuleBeginCursorOver);
+	CapsuleComponent->OnEndCursorOver.AddDynamic(this, &AMRC_BasePawn::OnCapsuleEndCursorOver);
 }
 
 // Called every frame
@@ -92,12 +62,21 @@ void AMRC_BasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
+
+// -------------------
+// Pawn selection
+// -------------------
+
 void AMRC_BasePawn::SelectActor_Implementation(const bool Selected)
 {
 	if (SelectedIndicator) {
 		SelectedIndicator->SetHiddenInGame(!Selected);
 	}
 }
+
+// --------------------------------------
+// Navigabe Interface / Movement
+// --------------------------------------
 
 void AMRC_BasePawn::MoveToLocation_Implementation(const FVector TargetLocation, const float MoveSpeed)
 {
@@ -110,6 +89,40 @@ void AMRC_BasePawn::MoveToLocation_Implementation(const FVector TargetLocation, 
 
 }
 
+void AMRC_BasePawn::OrientPawnToMovementOrientation()
+{
+	if (!bIsMoving)
+	{
+		return;
+	}
+
+	FVector MoveDirection = (MoveTargetLocation - GetActorLocation());
+
+	if (MoveDirection.Length() < TargetPrecisionRadius)
+	{
+		bIsMoving = false;
+		CurrentSpeed = 0.f;
+		return;
+	}
+
+	// Set speed
+	FloatingPawnMovement->MaxSpeed = CurrentSpeed;
+
+	// Set direction
+	MoveDirection.Normalize(1);
+
+	// Rotate actor
+	FRotator DesiredRotation = UKismetMathLibrary::MakeRotFromX(MoveDirection);
+	DesiredRotation.Pitch = 0;
+	DesiredRotation.Roll = 0;
+	FRotator NewRotation = FMath::RInterpTo(GetActorRotation(), DesiredRotation, GetWorld()->GetDeltaSeconds(), CharacterTurnSpeed);
+	SetActorRotation(DesiredRotation);
+}
+
+// -------------------
+// Base Pawn Interface
+// -------------------
+
 EMRC_ActorType AMRC_BasePawn::GetActorType_Implementation()
 {
 	return ActorType;
@@ -120,6 +133,9 @@ TArray<TSubclassOf<AMRC_BaseBuilding>> AMRC_BasePawn::GetBuildOptions_Implementa
 	return BuildOptions;
 }
 
+// -------------------
+// Faction Interface
+// -------------------
 
 void AMRC_BasePawn::SetFaction_Implementation(const int32 NewFaction)
 {
@@ -129,5 +145,42 @@ void AMRC_BasePawn::SetFaction_Implementation(const int32 NewFaction)
 int32 AMRC_BasePawn::GetFaction_Implementation()
 {
 	return FactionID;
+}
+
+// -------------------
+// Mouse over event
+// -------------------
+
+void AMRC_BasePawn::OnCapsuleBeginCursorOver(UPrimitiveComponent* TouchedComponent)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("Cursor over begin"));
+	
+	// Define target tag
+	FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Actor.Events.BeginCursorOver"));
+
+	// Create Message
+	FMRC_CommonGameplayMessage Message;
+	Message.Sender = this;
+
+	// Broadcast
+	UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
+	MessageSubsystem.BroadcastMessage(MessageTag, Message);
+
+}
+
+void AMRC_BasePawn::OnCapsuleEndCursorOver(UPrimitiveComponent* TouchedComponent)
+{
+	//UE_LOG(LogTemp, Warning, TEXT("Cursor over end"));
+
+	// Define target tag
+	FGameplayTag MessageTag = FGameplayTag::RequestGameplayTag(FName("Actor.Events.EndCursorOver"));
+
+	// Create Message
+	FMRC_CommonGameplayMessage Message;
+	Message.Sender = this;
+
+	// Broadcast
+	UGameplayMessageSubsystem& MessageSubsystem = UGameplayMessageSubsystem::Get(this);
+	MessageSubsystem.BroadcastMessage(MessageTag, Message);
 }
 

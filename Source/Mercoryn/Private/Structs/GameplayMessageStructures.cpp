@@ -2,11 +2,3 @@
 
 
 #include "Structs/GameplayMessageStructures.h"
-
-GameplayMessageStructures::GameplayMessageStructures()
-{
-}
-
-GameplayMessageStructures::~GameplayMessageStructures()
-{
-}

@@ -80,21 +80,28 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
+	// -------------------
 	// Selectable Interface
+	// -------------------
 	void SelectActor_Implementation(const bool Selected) override;
 
 	void SetFaction_Implementation(const int32 NewFaction) override;
 
+	// -------------------
 	// Faction Interface
+	// -------------------
 	int32 GetFaction_Implementation() override;
 
-	// Base Actor Interface	
+	// -------------------
+	// Base Actor Interface
+	// -------------------
 	EMRC_ActorType GetActorType_Implementation() override;
 
 	TArray<TSubclassOf<AMRC_BaseBuilding>> GetBuildOptions_Implementation() override;
 
-	// Place Building mode
+	// -------------------
+	// Building
+	// -------------------
 	UFUNCTION(BlueprintCallable, Category = "Building")
 	void EnablePlacingMode();
 

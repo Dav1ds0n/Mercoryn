@@ -12,6 +12,7 @@
 #include "Interfaces/MRC_BaseActorInterface.h"
 #include "Common/Interfaces/MRC_FactionInterface.h"
 
+// Enums
 #include "Enums/MRC_ActorType.h"
 
 #include "MRC_BasePawn.generated.h"
@@ -103,5 +104,11 @@ public:
 	void SetFaction_Implementation(const int32 NewFaction) override;
 
 	int32 GetFaction_Implementation() override;
+
+	UFUNCTION()
+	void OnCapsuleBeginCursorOver(UPrimitiveComponent* TouchedComponent);
+
+	UFUNCTION()
+	void OnCapsuleEndCursorOver(UPrimitiveComponent* TouchedComponent);
 
 };

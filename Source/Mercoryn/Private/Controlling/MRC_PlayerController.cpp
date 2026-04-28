@@ -23,11 +23,10 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
-//class UHitResult;
-
 AMRC_PlayerController::AMRC_PlayerController()
 {
 	bShowMouseCursor = true;
+	bEnableMouseOverEvents = true;
 }
 
 
@@ -65,6 +64,9 @@ void AMRC_PlayerController::SetupInputComponent()
 	Input->BindAction(CommandActionQuick, ETriggerEvent::Completed, this, &AMRC_PlayerController::CommandQuickSelectedActor);
 }
 
+// --------------------------
+// Selection
+// --------------------------
 
 // Single Select
 void AMRC_PlayerController::Select(const FInputActionValue& Value)
@@ -190,7 +192,9 @@ void AMRC_PlayerController::SelectMultipleActors()
 	}
 }
 
+// --------------------------
 // Commanding Actors
+// --------------------------
 void AMRC_PlayerController::CommandSelectedActors(const FInputActionValue& Value)
 {
 	NavigateToTarget(400.f);
@@ -232,7 +236,9 @@ void AMRC_PlayerController::NavigateToTarget(const float MovementSpeed)
 	}
 }
 
-// Faction
+// --------------------------
+// Faction Interface
+// --------------------------
 void AMRC_PlayerController::SetFaction_Implementation(const int32 NewFaction)
 {
 	FactionID = NewFaction;
